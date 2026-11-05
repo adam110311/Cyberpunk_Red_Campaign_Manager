@@ -1,4 +1,5 @@
-﻿using Cyberpunk_Campaign.Logic.Interfaces;
+using Cyberpunk_Campaign.Logic.Exceptions;
+using Cyberpunk_Campaign.Logic.Interfaces;
 using Cyberpunk_Campaign.Logic.Models;
 using System;
 using System.Threading.Tasks;
@@ -12,10 +13,10 @@ namespace Cyberpunk_Campaign.Logic.Services
         
         public const int MinPasswordLength = 8;
 
-        public AccountService((IUserRepository users, IPasswordService passwords) dependencies)
+        public AccountService(IUserRepository users, IPasswordService passwords)
         {
-            _users = dependencies.users;
-            _passwords = dependencies.passwords;
+            _users = users;
+            _passwords = passwords;
         }
 
         public async Task<RegistrationResult> RegisterAsync(string username, string email, string password)
@@ -53,7 +54,15 @@ namespace Cyberpunk_Campaign.Logic.Services
             var hashedPassword = _passwords.HashPassword(password);
             var user = new User(username, email, hashedPassword);
 
-            await _users.AddAsync(user);
+            try
+            {
+                await _users.AddAsync(user);
+            }
+            catch (DuplicateUserException)
+            {
+                // Someone registered the same name or email between the checks above and this insert.
+                return RegistrationResult.Failure("Username or email is already in use.");
+            }
 
             return RegistrationResult.Success();
         }
@@ -67,7 +76,7 @@ namespace Cyberpunk_Campaign.Logic.Services
             if (user == null)
                 return null;
 
-            if (!_passwords.VerifyPassword(password, user.PasswordHash))
+            if (!_passwords.VerifyPassword(storedHash: user.PasswordHash, typedPassword: password))
                 return null;
 
             return user;

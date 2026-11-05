@@ -1,4 +1,4 @@
-﻿using Cyberpunk_Campaign.Logic.Exceptions;
+using Cyberpunk_Campaign.Logic.Exceptions;
 using Cyberpunk_Campaign.Logic.Interfaces;
 using Cyberpunk_Campaign.Logic.Models;
 using System;
@@ -9,6 +9,10 @@ using System.Threading.Tasks;
 
 namespace Cyberpunk_Campaign.tests.Fakes
 {
+    /// <summary>
+    /// In-memory stand-in for the real repository. Mimics the database:
+    /// case-insensitive matching and DuplicateUserException on a duplicate.
+    /// </summary>
     public class FakeUserRepository : IUserRepository
     {
         private readonly List<User> _users = new();
@@ -16,7 +20,7 @@ namespace Cyberpunk_Campaign.tests.Fakes
 
         public IReadOnlyList<User> Users => new ReadOnlyCollection<User>(_users);
 
-        public Task<User> AddAsync(User user)
+        public Task<int> AddAsync(User user)
         {
             // Check for duplicate username (case-insensitive)
             if (_users.Any(u => u.Username.Equals(user.Username, StringComparison.OrdinalIgnoreCase)))
@@ -39,7 +43,7 @@ namespace Cyberpunk_Campaign.tests.Fakes
             );
 
             _users.Add(newUser);
-            return Task.FromResult(newUser);
+            return Task.FromResult(newUser.Id);
         }
 
         public Task<User?> GetByIdAsync(int id)
@@ -48,47 +52,21 @@ namespace Cyberpunk_Campaign.tests.Fakes
             return Task.FromResult(user);
         }
 
-        public Task<User?> GetByUsernameAsync(string username)
+        public Task<bool> UsernameExistsAsync(string username)
         {
-            var user = _users.FirstOrDefault(u => 
-                u.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
-            return Task.FromResult(user);
+            return Task.FromResult(_users.Any(u => u.Username.Equals(username.Trim(), StringComparison.OrdinalIgnoreCase)));
+        }
+
+        public Task<bool> EmailExistsAsync(string email)
+        {
+            return Task.FromResult(_users.Any(u => u.Email.Equals(email.Trim(), StringComparison.OrdinalIgnoreCase)));
         }
 
         public Task<User?> GetByEmailAsync(string email)
         {
-            var user = _users.FirstOrDefault(u => 
-                u.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
+            var user = _users.FirstOrDefault(u =>
+                u.Email.Equals(email.Trim(), StringComparison.OrdinalIgnoreCase));
             return Task.FromResult(user);
-        }
-
-        public Task<IEnumerable<User>> GetAllAsync()
-        {
-            return Task.FromResult(_users.AsEnumerable());
-        }
-
-        public Task<User> UpdateAsync(User user)
-        {
-            var index = _users.FindIndex(u => u.Id == user.Id);
-            if (index == -1)
-            {
-                throw new KeyNotFoundException($"User with ID {user.Id} not found.");
-            }
-
-            _users[index] = user;
-            return Task.FromResult(user);
-        }
-
-        public Task<bool> DeleteAsync(int id)
-        {
-            var index = _users.FindIndex(u => u.Id == id);
-            if (index == -1)
-            {
-                return Task.FromResult(false);
-            }
-
-            _users.RemoveAt(index);
-            return Task.FromResult(true);
         }
     }
 }
