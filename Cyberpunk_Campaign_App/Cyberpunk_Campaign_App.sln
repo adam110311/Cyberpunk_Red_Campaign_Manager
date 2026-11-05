@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cyberpunk_Campaign.web", "C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cyberpunk_Campaign.Logic", "CyberpunkRed.Logic\Cyberpunk_Campaign.Logic.csproj", "{CCE5B207-0337-4236-BCD1-E92F11DFF364}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cyberpunk_Campaign.DataAcess", "Cyberpunk_Campaign.DataAcess\Cyberpunk_Campaign.DataAcess.csproj", "{E2E1C54D-E562-4E80-A7A1-0EA2BD318FB0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cyberpunk_Campaign.DataAccess", "Cyberpunk_Campaign.DataAcess\Cyberpunk_Campaign.DataAccess.csproj", "{E2E1C54D-E562-4E80-A7A1-0EA2BD318FB0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cyberpunk_Campaign.tests", "Cyberpunk_Campaign.tests\Cyberpunk_Campaign.tests.csproj", "{67822CC9-4F64-4BAD-8E3A-B94010E47601}"
 EndProject
