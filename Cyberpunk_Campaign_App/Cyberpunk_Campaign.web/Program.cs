@@ -1,4 +1,4 @@
-using Cyberpunk_Campaign.DataAcess;
+using Cyberpunk_Campaign.DataAccess;
 using Cyberpunk_Campaign.web.Components;
 
 var builder = WebApplication.CreateBuilder(args);

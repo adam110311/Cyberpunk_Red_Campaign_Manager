@@ -1,6 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 
-namespace Cyberpunk_Campaign.DataAcess
+namespace Cyberpunk_Campaign.DataAccess
 {
     public class SqlConnectionFactory
     {

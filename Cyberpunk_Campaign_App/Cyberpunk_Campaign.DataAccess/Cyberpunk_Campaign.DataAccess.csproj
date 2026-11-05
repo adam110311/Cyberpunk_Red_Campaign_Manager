@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CyberpunkRed.Logic\Cyberpunk_Campaign.Logic.csproj" />
+    <ProjectReference Include="..\Cyberpunk_Campaign.Logic\Cyberpunk_Campaign.Logic.csproj" />
   </ItemGroup>
 
 </Project>
