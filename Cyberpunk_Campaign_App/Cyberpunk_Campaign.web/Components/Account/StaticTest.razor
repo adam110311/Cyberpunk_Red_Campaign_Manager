@@ -1,0 +1,20 @@
+﻿@page "/account/test"
+
+<PageTitle>Static Test</PageTitle>
+
+<h3>Static Test</h3>
+
+<p role="status">Current count: @currentCount</p>
+
+<button class="btn btn-primary" @onclick="IncrementCount">
+    Click me
+</button>
+
+@code {
+    private int currentCount;
+
+    private void IncrementCount()
+    {
+        currentCount++;
+    }
+}
